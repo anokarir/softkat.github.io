@@ -12,8 +12,8 @@
     --surface:#1E1A1A;
     --ink:#F4F1EC;
     --muted:#B3A8A5;
-    --red:#C8202B;
-    --red-soft:#3A1416;
+    --red:#E0508A;
+    --red-soft:#3A1428;
     --line:#332C2C;
   }
 
@@ -163,6 +163,7 @@
     width:100%;
     height:280px;
     object-fit:cover;
+    cursor:zoom-in;
   }
 
   .empty-note{
@@ -182,6 +183,7 @@
     height:260px;
     object-fit:cover;
     object-position:top;
+    cursor:zoom-in;
   }
   .cert-label{
     font-family:'IBM Plex Mono',monospace;
@@ -213,6 +215,39 @@
     color:var(--muted);
     text-align:center;
   }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(10,8,8,0.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:24px;
+    cursor:zoom-out;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    border:2px solid var(--red);
+  }
+  .lightbox-close{
+    position:absolute;
+    top:20px;
+    right:24px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    color:var(--ink);
+    border:1px solid var(--ink);
+    background:transparent;
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .lightbox-close:hover{color:var(--red);border-color:var(--red);}
 
   @media (max-width:640px){
     .sheet{padding:40px 24px 64px;}
@@ -282,8 +317,8 @@
         <div class="tech-num">02 · холодна техніка</div>
         <div class="tech-title">Трес-нарощення</div>
         <div class="tech-desc">
-          Нарощення без нагрівання, на стрічках або швах. Практикуюсь
-          на знайомих, вивчаю різні типи кріплення трес.
+          Голівудське нарощення на мікрокільцях (мікрорінгах). Практикуюсь
+          на знайомих, вивчаю різні типи кріплення.
         </div>
       </div>
 
@@ -372,6 +407,35 @@
   </footer>
 
 </div>
+
+<!-- ==================== ЛАЙТБОКС ====================
+     Збільшене фото при кліку на сертифікат або роботу -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">Закрити ✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  function openLightbox(src, alt){
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox-img').alt = alt;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox(){
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if(e.target.id === 'lightbox'){ closeLightbox(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeLightbox(); }
+  });
+  document.querySelectorAll('.cert-card img, .work-card img').forEach(function(img){
+    img.addEventListener('click', function(){
+      openLightbox(img.getAttribute('src'), img.getAttribute('alt'));
+    });
+  });
+</script>
 
 </body>
 </html>
